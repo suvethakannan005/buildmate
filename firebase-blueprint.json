@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "name": { "type": "string", "description": "Full name" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["student", "freelancer", "entrepreneur"] },
+        "skillsOffered": { "type": "array", "items": { "type": "string" } },
+        "skillsWanted": { "type": "array", "items": { "type": "string" } },
+        "github": { "type": "string", "format": "uri" },
+        "linkedin": { "type": "string", "format": "uri" },
+        "portfolio": { "type": "array", "items": { "type": "string" } },
+        "bio": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "email", "role"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Project details for Build Mode",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "domain": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "rolesNeeded": { "type": "array", "items": { "type": "string" } },
+        "visibility": { "type": "string", "enum": ["public", "private"] },
+        "status": { "type": "string", "enum": ["open", "in-progress", "completed"] },
+        "team": { "type": "array", "items": { "type": "string" } },
+        "githubLink": { "type": "string", "format": "uri" },
+        "liveUrl": { "type": "string", "format": "uri" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "ownerId", "status", "visibility"]
+    },
+    "Session": {
+      "title": "Session",
+      "description": "Skill exchange session for Learn Mode",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string" },
+        "learnerId": { "type": "string" },
+        "skill": { "type": "string" },
+        "scheduledAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["upcoming", "completed", "cancelled"] },
+        "review": {
+          "type": "object",
+          "properties": {
+            "rating": { "type": "number" },
+            "comment": { "type": "string" }
+          }
+        }
+      },
+      "required": ["teacherId", "learnerId", "skill", "scheduledAt", "status"]
+    },
+    "SwapRequest": {
+      "title": "SwapRequest",
+      "description": "Skill swap proposal",
+      "type": "object",
+      "properties": {
+        "fromId": { "type": "string" },
+        "toId": { "type": "string" },
+        "offeredSkill": { "type": "string" },
+        "wantedSkill": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fromId", "toId", "offeredSkill", "wantedSkill", "status"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Real-time chat message",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderId", "text", "createdAt"]
+    },
+    "ProjectRequest": {
+      "title": "ProjectRequest",
+      "description": "Request to join a project",
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string" },
+        "userId": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["projectId", "userId", "ownerId", "status"]
+    }
+  },
+  "firestore": {
+    "users": { "schema": "User", "description": "User profiles" },
+    "projects": { "schema": "Project", "description": "Build mode projects" },
+    "sessions": { "schema": "Session", "description": "Learn mode sessions" },
+    "swapRequests": { "schema": "SwapRequest", "description": "Skill swap requests" },
+    "chats/{chatId}/messages": { "schema": "ChatMessage", "description": "Chat messages within a thread" },
+    "projectRequests": { "schema": "ProjectRequest", "description": "Requests to join projects" }
+  }
+}
